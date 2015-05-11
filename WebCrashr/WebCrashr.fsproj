@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="work\workCommon.fs" />
     <Compile Include="work\webPageWork.fs" />
+    <Compile Include="work\workKnob.fs" />
     <Compile Include="actors\actorCommon.fs" />
     <Compile Include="actors\worker\worker.fs" />
     <Compile Include="actors\reporter\reporter.fs" />

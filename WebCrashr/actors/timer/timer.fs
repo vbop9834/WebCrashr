@@ -14,7 +14,7 @@ open unitOfTimeMeasurements
             actor.Start(fun inbox ->
                 let timerStopWatch = Stopwatch.StartNew ()
 
-                let rec loop remainingWork lastTickInMs =
+                let rec loop workList lastTickInMs =
                     async {
                         let! msg = inbox.Receive ()
                         match msg with
@@ -24,14 +24,14 @@ open unitOfTimeMeasurements
                           let timeSinceLastTick = elapsedTimeInMs - lastTickInMs
                          
                           if (timeSinceLastTick |> convertIntToMilliseconds >= tickAtThisManyMilliseconds) then                            
-                            let workToDo = remainingWork |> List.head
+                            let workToDo = workList |> List.head
                             workToDo |> manager.SendCommandToWorker |> managerActor.Post
-                            let workRemainingAfterSendingToWorker = remainingWork |> List.tail |> List.append <| [workToDo]
+                            let workRemainingAfterSendingToWorker = workList |> List.tail |> List.append <| [workToDo]
                             timerActions.Tick |> inbox.Post
                             return! loop workRemainingAfterSendingToWorker elapsedTimeInMs
                           
                           timerActions.Tick |> inbox.Post
-                          return! loop remainingWork lastTickInMs
+                          return! loop workList lastTickInMs
                     }
                 loop workList timerStopWatch.ElapsedMilliseconds //Start the work
             )
