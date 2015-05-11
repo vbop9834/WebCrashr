@@ -1,10 +1,14 @@
 ﻿namespace WebCrashr
 open timer
 open unitOfTimeMeasurements
+open inputCommon
 
     module WebCrashr =
         
-        let startWebCrashr amountOfWorkersOrdered workList (timeToRun : int) =
+        let startWebCrashr ( webCrashrConfig : webCrashrConfiguration ) =
             printf "Starting Web Crashr\n"
-            timer.startTimer amountOfWorkersOrdered workList second
-            System.Threading.Thread.Sleep(timeToRun)
+            printf "Execution Time Set To %i milliseconds\n" webCrashrConfig.executionTimeInMilliseconds
+            printf "RPM set to %i milliseconds\n" webCrashrConfig.rpmInMilliseconds
+            printf "%i Workers Ordered on Init\n" webCrashrConfig.amountOfWorkersToOrder
+            timer.startTimer webCrashrConfig.amountOfWorkersToOrder webCrashrConfig.workList webCrashrConfig.rpmInMilliseconds
+            System.Threading.Thread.Sleep(webCrashrConfig.executionTimeInMilliseconds)

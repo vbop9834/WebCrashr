@@ -1,0 +1,15 @@
+<WebCrashrConfiguration>
+	<config>
+		<rpmInMilliseconds>1000</rpmInMilliseconds>
+		<executionTimeInMilliseconds>10000</executionTimeInMilliseconds>
+		<amountOfWorkersToOrder>10</amountOfWorkersToOrder>
+	</config>
+	<work>
+		<url>http://www.google.com</url>
+		<percentage>50</percentage>
+	</work>
+	<work>
+		<url>http://www.google.com</url>
+		<percentage>50</percentage>
+	</work>
+</WebCrashrConfiguration>

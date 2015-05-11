@@ -1,12 +1,7 @@
 ﻿open WebCrashr
-open System
 
 [<EntryPoint>]
 let main argv = 
-    let url = "http://www.google.com"
-    let work = url |> webPageWork.webPageWork
-    let knob = work |> workKnob.createKnob <| 50
-    let workList = [knob; knob] |> workKnob.getWorkList
-    let WorkersNeeded = 10 //workers
-    WebCrashr.startWebCrashr WorkersNeeded workList 10000
+    let webCrashrConfig = "C:\projects\WebCrashr\WebCrashr\SampleXmlInput.xml" |> xmlInputReader.getPropertiesFromXml 
+    webCrashrConfig |> WebCrashr.startWebCrashr
     0 // return an integer exit code

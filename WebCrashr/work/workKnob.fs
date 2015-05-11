@@ -16,5 +16,5 @@ open workCommon
 
         let getWorkList knobList =
             knobList 
-            |> List.map (fun knob -> [1 .. 100/knob.percentage] |> List.map (fun _ -> knob.work)) 
+            |> Array.map (fun knob -> [1 .. 100/knob.percentage] |> List.map (fun _ -> knob.work)) 
             |> List.concat
