@@ -1,5 +1,10 @@
-<WebCrashrConfiguration>
+ <WebCrashrConfiguration>
 	<config>
+		<reporter>
+			<type>FileReporter</type>
+			<outputDir>C:\Projects</outputDir>
+			<fileName>webCrashrOutput.txt</fileName>
+		</reporter>
 		<rpmInMilliseconds>1000</rpmInMilliseconds>
 		<executionTimeInMilliseconds>10000</executionTimeInMilliseconds>
 		<amountOfWorkersToOrder>10</amountOfWorkersToOrder>

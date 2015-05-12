@@ -1,23 +1,43 @@
 ﻿namespace WebCrashr
-open actorCommon
-open workCommon
-open System.IO
+    open actorCommon
+    open inputCommon
+    open workCommon
+    open reporterTypes
 
-module reporter =
+    open IReporter
+    open fileReporter
+    open consoleReporter
 
-    type reporterActions =
-        | Report of workResult
+    open System.IO
+
+    module reporter =
+    
+        let getReporterFromType (reporterConfiguration : reporterConfiguration) : IReporter =
+            match reporterConfiguration.reporterType with
+                | reporters.FileReporter -> 
+                    new fileReporter(reporterConfiguration.outputDir, reporterConfiguration.fileName) :> IReporter
+                | reporters.ConsoleReporter ->
+                    new consoleReporter () :> IReporter
+
+        type reporterActions =
+            | Report of workResult
+            | Die of AsyncReplyChannel<unit>
         
-    let getReporterActor () : actor<reporterActions> =
-        actor.Start(fun inbox ->
-            let rec loop () =
-                async {
-                    let! msg = inbox.Receive ()
-                    match msg with
-                        | reporterActions.Report workResult ->
-                          printf "%s hit in %i milliseconds\n" workResult.subject workResult.workTime
-                          return! loop ()
-                    }
-            loop ()
-        )
-        
+        let getReporterActor reporterConfiguration : actor<reporterActions> =
+            let reporter = getReporterFromType reporterConfiguration
+            actor.Start(fun inbox ->
+                let rec loop () =
+                    async {
+                        let! msg = inbox.Receive ()
+                        match msg with
+                            | reporterActions.Report workResult ->
+                              workResult |> reporter.report
+                              return! loop ()
+                            | reporterActions.Die syncChannel ->
+                              reporter.die ()
+                              syncChannel.Reply ()
+                              return ()
+                        }
+                loop ()
+            )
+            

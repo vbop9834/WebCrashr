@@ -1,6 +1,7 @@
 ﻿namespace WebCrashr
 open workKnob
 open inputCommon
+open reporterTypes
 open webPageWork
 open FSharp.Data
 open System.IO
@@ -10,6 +11,11 @@ open System.IO
         type inputXmlFormat = XmlProvider<"
         <WebCrashrConfiguration>
             <config>
+                <reporter>
+                    <type>FileReporter</type>
+                    <outputDir>C:\</outputDir>
+                    <fileName>webCrashrOutput.txt</fileName>
+                </reporter>
                 <rpmInMilliseconds>1000</rpmInMilliseconds>
                 <executionTimeInMilliseconds>10000</executionTimeInMilliseconds>
                 <amountOfWorkersToOrder>10</amountOfWorkersToOrder>
@@ -41,6 +47,13 @@ open System.IO
                     
         let private getRpmInMillisecondsFromXml (inputXml : inputXmlFormat.WebCrashrConfiguration) =
             int64(inputXml.Config.RpmInMilliseconds)
+        
+        let private getReporterProperties (inputXml : inputXmlFormat.Reporter) =
+            {
+                reporterType = inputXml.Type |> reporterTypes.matchStringWithReporterType
+                outputDir = inputXml.OutputDir
+                fileName = inputXml.FileName
+            }
 
         let getPropertiesFromXml xmlFilePath =
             let inputXml = xmlFilePath |> getXmlStringFromFile |> inputXmlFormat.Parse
@@ -49,4 +62,5 @@ open System.IO
                 executionTimeInMilliseconds =  inputXml |> getExecutionTimeInMsFromXml
                 amountOfWorkersToOrder = inputXml |> getAmountOfWorkersToOrderFromXml
                 rpmInMilliseconds = inputXml |> getRpmInMillisecondsFromXml
+                reporterConfiguration = inputXml.Config.Reporter |> getReporterProperties
             }

@@ -52,6 +52,10 @@
     <Compile Include="work\workCommon.fs" />
     <Compile Include="work\webPageWork.fs" />
     <Compile Include="work\workKnob.fs" />
+    <Compile Include="typesOfReporters\IReporter.fs" />
+    <Compile Include="typesOfReporters\reporters\consoleReporter.fs" />
+    <Compile Include="typesOfReporters\reporters\fileReporter.fs" />
+    <Compile Include="inputReaders\reporterTypes.fs" />
     <Compile Include="inputReaders\inputCommon.fs" />
     <Compile Include="inputReaders\xmlInputReader.fs" />
     <Compile Include="actors\actorCommon.fs" />

@@ -4,6 +4,7 @@ open actorCommon
 
         type workerActions = 
             | Work of command
+            | Die of AsyncReplyChannel<unit>
 
         type worker =
             {
@@ -20,6 +21,9 @@ open actorCommon
                         | workerActions.Work command ->
                           command.work () |> command.reportResultsOfWork <| id
                           return! loop id
+                        | workerActions.Die syncChannel ->
+                            syncChannel.Reply ()
+                            return ()
                     }
                 loop id
             )
